@@ -1,0 +1,34 @@
+{
+  "id": "factoryRunnerFixture01",
+  "name": "Factory — Runner event validation fixture",
+  "active": false,
+  "nodes": [
+    {
+      "id": "fixture-manual-1",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [0, 0],
+      "parameters": {}
+    },
+    {
+      "id": "fixture-events-1",
+      "name": "Sample runner events",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [240, 0],
+      "parameters": {"jsCode": "return [{json:{run_id:'run-001',issue_number:12,status:'done'}},{json:{run_id:'run-001',issue_number:12,status:'done'}},{json:{issue_number:'not-a-number',status:'unknown'}}];"}
+    },
+    {
+      "id": "fixture-validate-1",
+      "name": "Validate runner events",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [500, 0],
+      "parameters": {"jsCode": "const seen = new Set();\nreturn $input.all().map(item => {\n const e = item.json;\n if (typeof e.run_id !== 'string' || !e.run_id || !Number.isInteger(e.issue_number) || e.issue_number < 1 || !['done','question','stuck'].includes(e.status)) return {json:{status:'rejected',reason:'invalid_runner_event'}};\n if (seen.has(e.run_id)) return {json:{run_id:e.run_id,status:'duplicate'}};\n seen.add(e.run_id);\n return {json:{run_id:e.run_id,issue_number:e.issue_number,status:'accepted'}};\n});"}
+    }
+  ],
+  "connections": {"Manual Trigger": {"main": [[{"node": "Sample runner events", "type": "main", "index": 0}]]}, "Sample runner events": {"main": [[{"node": "Validate runner events", "type": "main", "index": 0}]]}},
+  "settings": {"executionOrder": "v1"},
+  "pinData": {}
+}

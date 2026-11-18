@@ -1,0 +1,28 @@
+{
+  "name": "Factory — Basic B — Collect Runner Result",
+  "nodes": [
+    {
+      "parameters": {"rule": {"interval": [{"field": "minutes", "minutesInterval": 2}]}},
+      "id": "b2020001-0000-4000-8000-000000000001",
+      "name": "Every two minutes",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {"content": "CONFIGURE IN N8N UI:\nFind Building issues and parse their `Factory run: <id>` comment. GET {{$env.FACTORY_RUNNER_URL}}/runs/<id>.\n- running: no change\n- question: comment message; Building → Waiting for you\n- stuck: comment message; Building → Stuck\n- done: comment summary and PR URL; Building → Your QA\nNever infer a result from a missing run ID.", "height": 210, "width": 470},
+      "id": "b2020001-0000-4000-8000-000000000002",
+      "name": "Configure result collection",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [250, -110]
+    }
+  ],
+  "connections": {},
+  "pinData": {},
+  "active": false,
+  "settings": {"executionOrder": "v1"},
+  "versionId": "b2020001-0000-4000-8000-000000000000",
+  "meta": {"templateCredsSetupCompleted": false},
+  "tags": []
+}

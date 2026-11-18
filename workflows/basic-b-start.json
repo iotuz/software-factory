@@ -1,0 +1,36 @@
+{
+  "name": "Factory — Basic B — Start Approved Task",
+  "nodes": [
+    {
+      "parameters": {"rule": {"interval": [{"field": "minutes", "minutesInterval": 2}]}},
+      "id": "a1010001-0000-4000-8000-000000000001",
+      "name": "Every two minutes",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {"jsCode": "// Replace this node with a GitHub Issues query for labels=Approved and labels=Building.\n// Guard: if any Building issue exists, return []. Otherwise return exactly the oldest Approved issue.\nreturn [];"},
+      "id": "a1010001-0000-4000-8000-000000000002",
+      "name": "Select one approved issue",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [240, 0]
+    },
+    {
+      "parameters": {"content": "CONFIGURE IN N8N UI:\nQuery GitHub first: if no Building issue exists, select one Approved issue, replace its state label with Building, then POST {issue_number,title,specification} to {{$env.FACTORY_RUNNER_URL}}/runs. Store returned run_id in a GitHub comment, e.g. `Factory run: <id>`.", "height": 170, "width": 440},
+      "id": "a1010001-0000-4000-8000-000000000003",
+      "name": "Configure GitHub and runner writes",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [480, -90]
+    }
+  ],
+  "connections": {"Every two minutes": {"main": [[{"node": "Select one approved issue", "type": "main", "index": 0}]]}},
+  "pinData": {},
+  "active": false,
+  "settings": {"executionOrder": "v1"},
+  "versionId": "a1010001-0000-4000-8000-000000000000",
+  "meta": {"templateCredsSetupCompleted": false},
+  "tags": []
+}

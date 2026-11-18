@@ -1,0 +1,28 @@
+{
+  "name": "Factory — Track Pull Requests",
+  "nodes": [
+    {
+      "parameters": {"rule": {"interval": [{"field": "minutes", "minutesInterval": 5}]}},
+      "id": "c3030001-0000-4000-8000-000000000001",
+      "name": "Every five minutes",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {"content": "CONFIGURE IN N8N UI:\nList open PRs whose head branch matches issue-N. Find the linked issue N. If the issue is Building, change it to Your QA and add the PR URL. On a later poll, move to Done only if the PR is merged or its issue is closed. A closed-unmerged PR must be noted for human follow-up, never treated as merged.", "height": 185, "width": 490},
+      "id": "c3030001-0000-4000-8000-000000000002",
+      "name": "Configure PR tracking",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [240, -100]
+    }
+  ],
+  "connections": {},
+  "pinData": {},
+  "active": false,
+  "settings": {"executionOrder": "v1"},
+  "versionId": "c3030001-0000-4000-8000-000000000000",
+  "meta": {"templateCredsSetupCompleted": false},
+  "tags": []
+}

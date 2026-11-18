@@ -1,0 +1,7 @@
+.env
+runner/.venv/
+runner/__pycache__/
+runner/runner/__pycache__/
+runner/tests/__pycache__/
+factory-runs/
+.pytest_cache/

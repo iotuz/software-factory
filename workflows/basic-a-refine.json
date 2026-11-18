@@ -1,0 +1,50 @@
+{
+  "name": "Factory — Basic A — Refine Ideas",
+  "nodes": [
+    {
+      "parameters": {"rule": {"interval": [{"field": "minutes", "minutesInterval": 5}]}},
+      "id": "d4e67e12-0ce9-4f6e-b91a-7f4bf0210001",
+      "name": "Every five minutes",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=https://api.github.com/repos/{{$env.FACTORY_REPOSITORY}}/issues?state=open&labels=Ideas&per_page=100",
+        "sendHeaders": true,
+        "headerParameters": {"parameters": [{"name": "Authorization", "value": "={{ 'Bearer ' + $env.GITHUB_TOKEN }}"}, {"name": "Accept", "value": "application/vnd.github+json"}]},
+        "options": {}
+      },
+      "id": "d4e67e12-0ce9-4f6e-b91a-7f4bf0210002",
+      "name": "Fetch Ideas from GitHub",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [220, 0]
+    },
+    {
+      "parameters": {"jsCode": "const issues = Array.isArray($json) ? $json : ($json.data ?? []);\nreturn issues.filter(issue => !issue.pull_request).map(issue => ({ json: { issue_number: issue.number, title: issue.title, body: issue.body ?? '', prompt: `You are the specification editor in a human-controlled software factory. Rewrite this rough GitHub issue using these exact headings: Goal, Why, Scope, Constraints, Acceptance criteria, Open questions. Do not invent requirements. You advise; a human alone approves. Return Markdown only.\\n\\nTitle: ${issue.title}\\nBody: ${issue.body ?? ''}` } }));"},
+      "id": "d4e67e12-0ce9-4f6e-b91a-7f4bf0210003",
+      "name": "Build refinement prompts",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [460, 0]
+    },
+    {
+      "parameters": {"content": "CONFIGURE IN N8N UI:\n1. Send `prompt` to an OpenAI Chat Model using docs/refinement-prompt.md.\n2. Post the Markdown output as a GitHub issue comment.\n3. Replace label Ideas with Ready for approval.\n4. Preserve issue_number through each node.", "height": 180, "width": 400},
+      "id": "d4e67e12-0ce9-4f6e-b91a-7f4bf0210004",
+      "name": "Configure AI and GitHub writes",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [700, -90]
+    }
+  ],
+  "connections": {"Every five minutes": {"main": [[{"node": "Fetch Ideas from GitHub", "type": "main", "index": 0}]]}, "Fetch Ideas from GitHub": {"main": [[{"node": "Build refinement prompts", "type": "main", "index": 0}]]}},
+  "pinData": {},
+  "active": false,
+  "settings": {"executionOrder": "v1"},
+  "versionId": "d4e67e12-0ce9-4f6e-b91a-7f4bf0210000",
+  "meta": {"templateCredsSetupCompleted": false},
+  "tags": []
+}
