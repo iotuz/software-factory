@@ -1,3 +1,7 @@
 # Product area
 
-This folder is intentionally small and initially empty. Use issues processed by the factory to build a demonstrable product here (for example, a simple chess puzzle or task tracker). Keep factory infrastructure outside this folder so task pull requests are easy to review.
+This folder contains the built example produced by factory tasks. Keep factory infrastructure outside this folder so task pull requests are easy to review.
+
+## Manual verification
+
+Open `index.html` in a browser. The page should display: **Hello from the exam factory!**
